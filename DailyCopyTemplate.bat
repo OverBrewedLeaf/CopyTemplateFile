@@ -1,29 +1,30 @@
 @echo off
 
-set @name=test
-set @ext=txt
-set @directory=dir
+set @name=<templatefile>
+set @ext=<templatefiletype>
+set @directory=<directorypath>
 
-set @target=%@name% %date:~12%%date:~4,2%%date:~7,2%.%@ext%
+set @date=%date:~12%%date:~4,2%%date:~7,2%
+set @target=<Target Name Here>%@date%.%@ext%
+
 IF EXIST "%@directory%" (
-    goto :dircheckcomplete
+    echo Dir Exists
 ) ELSE (
     echo making new directory
     mkdir %@directory%
 )
 
-:dircheckcomplete
 cd "%@directory%"
 IF EXIST "%@target%" (
-    goto EOF
-) ELSE (
-    cd ..
-    xcopy /i "%@name%.%@ext%" "%@directory%"
-    cd "%@directory%"
-    ren "%@name%.%@ext%" "%@target%"
-    goto EOF
+    goto :EOF
 )
 
+:COPYFILE
+cd ..
+xcopy /i "%@name%.%@ext%" "%@directory%"
+cd "%@directory%"
+ren "%@name%.%@ext%" "%@target%"
+
 :EOF
-"%target%"
+"%@target%"
 cd ..
